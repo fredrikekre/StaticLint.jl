@@ -1,4 +1,4 @@
-function resolve_import_block(x::EXPR, state::State, root, usinged, markfinal=true)
+function resolve_import_block(x::EXPR, state::State, root, usinged, markfinal = true)
     if x.head == :as
         resolve_import_block(x.args[1], state, root, usinged, markfinal)
         if x.args[2].meta === nothing
@@ -37,7 +37,7 @@ function resolve_import_block(x::EXPR, state::State, root, usinged, markfinal=tr
     end
 end
 
-function resolve_import(x::EXPR, state::State, root=getsymbols(state))
+function resolve_import(x::EXPR, state::State, root = getsymbols(state))
     if headof(x) === :using || headof(x) === :import
         usinged = headof(x) === :using
         if length(x.args) > 0 && isoperator(headof(x.args[1])) && valof(headof(x.args[1])) == ":"
@@ -86,11 +86,11 @@ end
 
 function has_workspace_package(server, name)
     haskey(server.workspacepackages, name) &&
-    hasscope(getcst(server.workspacepackages[name])) &&
-    haskey(scopeof(getcst(server.workspacepackages[name])).names, name) &&
-    scopeof(getcst(server.workspacepackages[name])).names[name] isa Binding &&
-    scopeof(getcst(server.workspacepackages[name])).names[name].val isa EXPR &&
-    CSTParser.defines_module(scopeof(getcst(server.workspacepackages[name])).names[name].val)
+        hasscope(getcst(server.workspacepackages[name])) &&
+        haskey(scopeof(getcst(server.workspacepackages[name])).names, name) &&
+        scopeof(getcst(server.workspacepackages[name])).names[name] isa Binding &&
+        scopeof(getcst(server.workspacepackages[name])).names[name].val isa EXPR &&
+        CSTParser.defines_module(scopeof(getcst(server.workspacepackages[name])).names[name].val)
 end
 
 function add_to_imported_modules(scope::Scope, name::Symbol, val)
@@ -121,8 +121,8 @@ function _get_field(par, arg, state)
     if par isa SymbolServer.EnvStore
         if (arg_scope = retrieve_scope(arg)) !== nothing && (tlm = get_named_toplevel_module(arg_scope, arg_str_rep)) !== nothing && hasbinding(tlm)
             return bindingof(tlm)
-        # elseif has_workspace_package(state.server, arg_str_rep)
-        #     return scopeof(getcst(state.server.workspacepackages[arg_str_rep])).names[arg_str_rep]
+            # elseif has_workspace_package(state.server, arg_str_rep)
+            #     return scopeof(getcst(state.server.workspacepackages[arg_str_rep])).names[arg_str_rep]
         elseif haskey(par, Symbol(arg_str_rep))
             if isempty(state.env.project_deps) || Symbol(arg_str_rep) in state.env.project_deps
                 return par[Symbol(arg_str_rep)]

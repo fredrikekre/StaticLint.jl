@@ -17,7 +17,7 @@ Binding(x::EXPR) = Binding(CSTParser.get_name(x), x, nothing, [])
 function Base.show(io::IO, b::Binding)
     printstyled(io, " Binding(", to_codeobject(b.name),
         b.type === nothing ? "" : ":: ",
-        b.refs isa Vector ? "($(length(b.refs)) refs))" : ")", color=:blue)
+        b.refs isa Vector ? "($(length(b.refs)) refs))" : ")", color = :blue)
 end
 
 
@@ -120,7 +120,7 @@ function mark_bindings!(x::EXPR, state)
 end
 
 
-function mark_binding!(x::EXPR, val=x)
+function mark_binding!(x::EXPR, val = x)
     if CSTParser.iskwarg(x) || (CSTParser.isdeclaration(x) && CSTParser.istuple(x.args[1]))
         mark_binding!(x.args[1], x)
     elseif CSTParser.istuple(x) || CSTParser.isparameters(x)
@@ -268,7 +268,7 @@ Add the binding of `x` to the current scope. Special handling is required for:
 
 Some simple type inference is run.
 """
-function add_binding(x, state, scope=state.scope)
+function add_binding(x, state, scope = state.scope)
     if bindingof(x) isa Binding
         b = bindingof(x)
         if isidentifier(b.name)
@@ -366,7 +366,7 @@ function add_binding(x, state, scope=state.scope)
 end
 
 function enforce_hard_scope(x::EXPR, scope)
-    scope.expr.head === :for && is_in_fexpr(x, x-> x == scope.expr.args[1])
+    scope.expr.head === :for && is_in_fexpr(x, x -> x == scope.expr.args[1])
 end
 
 name_is_getfield(x) = parentof(x) isa EXPR && parentof(parentof(x)) isa EXPR && CSTParser.is_getfield_w_quotenode(parentof(parentof(x)))

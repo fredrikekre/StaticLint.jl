@@ -2,7 +2,7 @@ function setup_server(env = dirname(SymbolServer.Pkg.Types.Context().env.project
     server = StaticLint.FileServer()
     ssi = SymbolServerInstance(depot, cache)
     _, server.symbolserver = SymbolServer.getstore(ssi, env)
-    server.symbol_extends  = SymbolServer.collect_extended_methods(server.symbolserver)
+    server.symbol_extends = SymbolServer.collect_extended_methods(server.symbolserver)
     server
 end
 
@@ -46,7 +46,7 @@ function lint_file(rootpath, server = setup_server(); gethints = false)
     end
     if gethints
         hints = []
-        for (p,f) in server.files
+        for (p, f) in server.files
             append!(hints, [(x, string(haserror(x) ? LintCodeDescriptions[x.meta.error] : "Missing reference", " at offset ", offset, " of ", p)) for (offset, x) in collect_hints(f.cst, getenv(f, server))])
         end
         return root, hints
